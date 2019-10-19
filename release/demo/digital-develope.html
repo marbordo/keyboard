@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>develope test for TV</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mocha.css" />
+  </head>
+  <body>
+    <p>
+      <p>data :</p>
+      <input id="data_input" type="text" name="data_input">
+    </p>
+    <p>
+      <p>pk:</p>
+      <input id="pk_input" type="text" name="pk_input">
+      <button onclick="click1()">encrypt</button>
+    </p>
+    <p>
+      <p>develope encrypt result:</p>
+      <label id="result" type="text" name="result"></label> 
+    </p>
+
+    <p>
+      <p>subpart use time :</p>
+      <label id="use_time">aaaaa</label>
+    </p>
+    <script type="text/javascript" src="../build/keyou-crypto.js"></script>
+    <script type="text/javascript">
+       function click1(){
+          var K = KeyouCryptography;
+          var Helper = K.util.Helper;
+          var pk = document.getElementById("pk_input").value;
+          var data = Helper.ascstr2array(document.getElementById("data_input").value);
+          var Hex = K.util.Hex;
+          var DigitalEnvelope = K.DigitalEnvelope;
+
+          KeyouCryptography.useTimeLabel.innerText = "--start  encrypt  at " + new Date().getTime();
+
+          var env = DigitalEnvelope.encrypt(data, pk, {
+              asymmetricAlg: K.AsymmetricAlg.SM2,
+              symmetricAlg: K.SymmetricAlg.SM4,
+              pad: K.Pad.padPKCS5
+          })
+          document.getElementById("result").innerText = "KeyCipher : " + env.KeyCipher + "\n MessageCipher : "+ env.MessageCipher;
+       }
+       var defaultData = "12345678";
+       var defaultPk = "C5F171CC415C5C2759FE4668F51C0D7DA2CB85AE754F29135FED90D50C3B437D2EEA0F54163C3880C13618FF0F7CA67201DFF244016F09F19F7C1EC5D4033546";
+       document.getElementById("data_input").value = defaultData;
+       document.getElementById("pk_input").value = defaultPk;
+       KeyouCryptography.useTimeLabel = document.getElementById("use_time");
+    </script>
+  </body>
+</html>
